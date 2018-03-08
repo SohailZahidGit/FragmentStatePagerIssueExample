@@ -1,0 +1,32 @@
+Given FixedFragmentStateAdaptor is not removing the destoryed fragment from savedStates.
+
+To fix this replace existing destroyItem() to given method.
+
+Change:
+mSavedState.set(position, mFragmentManager.saveFragmentInstanceState(fragment));
+ to
+mSavedState.set(position, null);
+
+It create new instance of fragment evey time.
+
+
+ @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        Fragment fragment = (Fragment)object;
+
+        if (mCurTransaction == null) {
+            mCurTransaction = mFragmentManager.beginTransaction();
+        }
+        if (DEBUG) Log.v(TAG, "Removing item #" + position + ": f=" + object
+                + " v=" + ((Fragment)object).getView() + " t=" + fragment.getTag());
+        while (mSavedState.size() <= position) {
+            mSavedState.add(null);
+            mSavedFragmentTags.add(null);
+        }
+        mSavedState.set(position, mFragmentManager.saveFragmentInstanceState(fragment));
+        //mSavedState.set(position, null);
+        mSavedFragmentTags.set(position, fragment.getTag());
+        mFragments.set(position, null);
+
+        mCurTransaction.remove(fragment);
+    }
