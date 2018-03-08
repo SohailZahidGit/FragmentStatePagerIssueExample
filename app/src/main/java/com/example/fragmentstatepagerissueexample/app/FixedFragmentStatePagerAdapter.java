@@ -150,7 +150,9 @@ public abstract class FixedFragmentStatePagerAdapter extends PagerAdapter {
             mSavedState.add(null);
             mSavedFragmentTags.add(null);
         }
-        mSavedState.set(position, mFragmentManager.saveFragmentInstanceState(fragment));
+        this will save the last state of fragment view.
+        //mSavedState.set(position, mFragmentManager.saveFragmentInstanceState(fragment));
+        mSavedState.set(position, null);
         mSavedFragmentTags.set(position, fragment.getTag());
         mFragments.set(position, null);
 
